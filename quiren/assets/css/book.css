@@ -1,0 +1,546 @@
+/* ==========================================================================
+   QUIREN — book.css
+   The jacket, the front matter, the typeset excerpt, praise, editions, press.
+   ========================================================================== */
+
+/* ==========================================================================
+   Masthead — an imprint bar, not a shop header
+   ========================================================================== */
+
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: color-mix(in srgb, var(--wine) 90%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.masthead__inner { display: flex; align-items: center; gap: var(--s-5); height: 64px; }
+
+.imprint { display: flex; align-items: center; gap: var(--s-3); flex: none; }
+.imprint__mark {
+  width: 26px; height: 26px;
+  border: 1px solid var(--gilt);
+  color: var(--gilt);
+  display: grid;
+  place-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  line-height: 1;
+}
+.imprint__word {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.booknav { display: flex; align-items: center; gap: var(--s-5); margin-left: auto; }
+.booknav a {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+  padding-block: 4px;
+  position: relative;
+  transition: color var(--dur-fast) var(--ease);
+}
+.booknav a:hover { color: var(--bone); }
+.booknav a[aria-current="page"] { color: var(--gilt); }
+.booknav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: var(--gilt);
+}
+
+.burger { display: none; }
+
+/* ==========================================================================
+   Colophon strip — the half-title line that opens a real book
+   ========================================================================== */
+
+.colophon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--rule-soft);
+  text-align: center;
+}
+.colophon span { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-3); }
+.colophon i { color: var(--gilt); font-style: normal; }
+
+/* ==========================================================================
+   The jacket — the book cover, drawn in CSS. No stock mockup.
+   ========================================================================== */
+
+.jacket-stage {
+  perspective: 1600px;
+  display: grid;
+  place-items: center;
+  padding-block: var(--s-5);
+}
+
+.jacket {
+  position: relative;
+  width: min(330px, 74vw);
+  aspect-ratio: 2 / 3;
+  transform: rotateY(-16deg) rotateX(3deg);
+  transform-style: preserve-3d;
+  transition: transform var(--dur-slow) var(--ease);
+  box-shadow: 34px 40px 70px -28px rgba(0, 0, 0, 0.75);
+}
+.jacket-stage:hover .jacket { transform: rotateY(-8deg) rotateX(1deg); }
+
+/* Front board */
+.jacket__front {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.09) 0%, transparent 42%),
+    var(--ink);
+  border: 1px solid rgba(216, 166, 87, 0.30);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--s-3);
+  padding: clamp(1.1rem, 3.4vw, 1.9rem);
+  overflow: hidden;
+}
+
+/* Gilt rule frame inset from the board edge — a real jacket convention */
+.jacket__front::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(216, 166, 87, 0.34);
+  pointer-events: none;
+}
+
+.jacket__imprint {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gilt);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.jacket__title {
+  align-self: center;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 6.4vw, 2.9rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--bone);
+  position: relative;
+  z-index: 1;
+}
+.jacket__title em { display: block; font-style: normal; color: var(--gilt); }
+
+.jacket__author {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+  position: relative;
+  z-index: 1;
+}
+
+/* Spine, rotated into place on the Y axis */
+.jacket__spine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 100%;
+  background: linear-gradient(90deg, #120508, var(--ink));
+  transform: rotateY(90deg) translateZ(-17px);
+  transform-origin: left center;
+  border-right: 1px solid rgba(216, 166, 87, 0.22);
+}
+
+/* Page block edge, so the object reads as a book rather than a flat card */
+.jacket__pages {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  width: 16px;
+  height: calc(100% - 10px);
+  background: repeating-linear-gradient(
+    180deg,
+    #efe6d8 0px, #efe6d8 1px,
+    #cdbfae 1px, #cdbfae 2px
+  );
+  transform: rotateY(-90deg) translateZ(-8px);
+  transform-origin: right center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jacket { transform: none; }
+  .jacket__spine, .jacket__pages { display: none; }
+}
+
+/* ==========================================================================
+   Hero — jacket left, apparatus right
+   ========================================================================== */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: clamp(var(--s-5), 5vw, var(--s-8));
+  align-items: center;
+}
+
+.hero__meta { display: grid; gap: var(--s-4); }
+
+.buyrow { display: flex; gap: var(--s-3); flex-wrap: wrap; align-items: center; }
+
+.formatchips { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+.formatchip {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-pill);
+  color: var(--bone-3);
+}
+.formatchip--on { border-color: var(--gilt); color: var(--gilt); }
+
+.starline { display: flex; align-items: center; gap: var(--s-3); }
+.stars { display: inline-flex; gap: 2px; color: var(--gilt); }
+.stars svg { width: 15px; height: 15px; fill: currentColor; }
+
+@media (max-width: 880px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .hero__meta { text-align: center; justify-items: center; }
+  .hero__meta .lede { margin-inline: auto; }
+  .buyrow, .formatchips, .starline { justify-content: center; }
+}
+
+/* ==========================================================================
+   Praise — blurbs, set as pull quotes
+   ========================================================================== */
+
+.praise { display: grid; gap: var(--s-6); }
+.blurb { display: grid; gap: var(--s-3); padding-top: var(--s-4); border-top: 1px solid var(--rule); }
+.blurb q {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 0.9rem + 0.6vw, 1.35rem);
+  line-height: 1.45;
+  color: var(--bone);
+  quotes: "\201C" "\201D";
+}
+.blurb__by { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bone-3); }
+.blurb__by b { color: var(--gilt); font-weight: 500; }
+
+/* ==========================================================================
+   The typeset page — the template's signature craft moment.
+   Real paper, real measure, drop cap, running head, folio.
+   ========================================================================== */
+
+.leaf {
+  background: var(--paper);
+  color: var(--paper-ink);
+  padding: clamp(var(--s-5), 5vw, var(--s-8)) clamp(var(--s-4), 5vw, var(--s-7));
+  box-shadow: 0 30px 70px -34px rgba(0, 0, 0, 0.7);
+  position: relative;
+}
+
+.leaf__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-4);
+  max-width: var(--measure);
+  margin: 0 auto var(--s-6);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid rgba(42, 26, 24, 0.16);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(42, 26, 24, 0.55);
+}
+
+.leaf__body { max-width: var(--measure); margin-inline: auto; }
+.leaf__body p { font-size: 1.0625rem; line-height: 1.9; text-align: justify; hyphens: auto; }
+.leaf__body p + p { margin-top: 0; text-indent: 1.6em; }
+
+/* Drop cap on the opening paragraph only */
+.leaf__body p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 3.4em;
+  line-height: 0.82;
+  padding: 0.06em 0.09em 0 0;
+  color: var(--wine);
+}
+.leaf__body p:first-of-type::first-line { font-variant-caps: small-caps; letter-spacing: 0.04em; }
+
+.leaf__chapter {
+  max-width: var(--measure);
+  margin: 0 auto var(--s-6);
+  text-align: center;
+}
+.leaf__chapter .label { color: rgba(42, 26, 24, 0.55); }
+.leaf__chapter h2 { font-size: var(--text-xl); color: var(--paper-ink); margin-top: var(--s-2); }
+
+.leaf__folio {
+  max-width: var(--measure);
+  margin: var(--s-7) auto 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: rgba(42, 26, 24, 0.45);
+}
+
+/* Fade the teaser excerpt out so "keep reading" is the obvious next move */
+.leaf--teaser .leaf__body { position: relative; max-height: 26rem; overflow: hidden; }
+.leaf--teaser .leaf__body::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 11rem;
+  background: linear-gradient(to bottom, transparent, var(--paper) 82%);
+}
+
+/* ==========================================================================
+   Editions
+   ========================================================================== */
+
+.edition {
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  border: 1px solid var(--rule);
+  background: rgba(243, 235, 225, 0.035);
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.edition:hover { border-color: var(--gilt); transform: translateY(-3px); }
+.edition--lead { border-color: var(--gilt); background: var(--gilt-wash); }
+.edition__price { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 600; }
+.edition__spec { display: grid; gap: var(--s-2); margin-top: var(--s-2); }
+.edition__spec li { font-size: var(--text-sm); color: var(--bone-3); display: flex; gap: var(--s-2); }
+.edition__spec svg { width: 14px; height: 14px; color: var(--gilt); flex: none; margin-top: 4px; }
+
+/* Retailer row */
+.retailers { display: flex; gap: var(--s-3); flex-wrap: wrap; }
+.retailer {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bone-2);
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.retailer:hover { border-color: var(--gilt); color: var(--gilt); }
+
+/* ==========================================================================
+   Author + figures
+   ========================================================================== */
+
+.author { display: grid; grid-template-columns: minmax(0, 0.6fr) minmax(0, 1fr); gap: var(--s-6); align-items: center; }
+.author img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; filter: grayscale(1) contrast(1.08); }
+
+@media (max-width: 760px) { .author { grid-template-columns: minmax(0, 1fr); } }
+
+.figure img { width: 100%; object-fit: cover; }
+.figure figcaption { margin-top: var(--s-3); font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bone-4); }
+
+/* ==========================================================================
+   Press / events
+   ========================================================================== */
+
+.pressrow {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr) auto;
+  gap: var(--s-4);
+  align-items: baseline;
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--rule-soft);
+}
+.pressrow:first-child { border-top: 1px solid var(--rule); }
+.pressrow__date { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gilt); }
+.pressrow__where { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bone-3); text-align: right; }
+
+@media (max-width: 700px) {
+  .pressrow { grid-template-columns: minmax(0, 1fr); gap: var(--s-2); }
+  .pressrow__where { text-align: left; }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.foot { background: var(--ink); margin-top: var(--s-8); padding-block: var(--s-7) var(--s-5); }
+.foot__grid { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: var(--s-6); }
+.foot h3 { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gilt); margin-bottom: var(--s-3); }
+.foot ul { display: grid; gap: var(--s-2); }
+.foot a { font-size: var(--text-sm); color: var(--bone-3); }
+.foot a:hover { color: var(--bone); }
+.foot__bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-4); flex-wrap: wrap;
+  margin-top: var(--s-6); padding-top: var(--s-4);
+  border-top: 1px solid var(--rule-soft);
+}
+
+@media (max-width: 860px) { .foot__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .foot__grid { grid-template-columns: minmax(0, 1fr); } }
+
+.newsletter { display: flex; gap: var(--s-2); max-width: 400px; }
+.newsletter .input { flex: 1; }
+
+/* ==========================================================================
+   Toast
+   ========================================================================== */
+
+.toasts {
+  position: fixed;
+  bottom: var(--s-5);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: grid;
+  gap: var(--s-2);
+  justify-items: center;
+  pointer-events: none;
+}
+.toast {
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-3) var(--s-5);
+  background: var(--gilt);
+  color: var(--ink);
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: auto;
+  animation: toast-in var(--dur) var(--ease);
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ==========================================================================
+   Mobile nav
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .masthead__inner { height: 58px; }
+  .booknav {
+    position: fixed;
+    inset: 58px 0 auto 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--wine-2);
+    border-bottom: 1px solid var(--rule);
+    padding: var(--s-3) var(--gutter) var(--s-5);
+    transform: translateY(-130%);
+    transition: transform var(--dur) var(--ease);
+    z-index: 40;
+  }
+  .booknav[data-open="true"] { transform: none; }
+  .booknav a { padding: var(--s-3) 0; border-bottom: 1px solid var(--rule-soft); font-size: 0.75rem; }
+  .burger { display: inline-grid; margin-left: auto; width: 40px; height: 40px; place-content: center; color: var(--bone-2); }
+  .burger svg { width: 20px; height: 20px; }
+}
+
+
+/* ==========================================================================
+   Студентські доопрацювання CSS (за завданням та регламентом оцінювання)
+   1) Фонова заливка: background-color (#1c1015, #fbf7ee, #26171e)
+   2) Тип та розмір шрифту: font-family: "Literata", font-size
+   3) Колір тексту: color: #e9dec9, #c49a45
+   4) Відступи: margin та padding для секцій та карток
+   5) Освоєно самостійно:
+      - linear-gradient(135deg, #c49a45, #dfba6c) - градієнтна позолочена заливка кнопок
+      - border-radius: 999px - заокруглення форми кнопок
+      - transition та :hover - плавний підйом кнопки при наведенні курсору миші
+   ========================================================================== */
+
+.btn--gilt-gradient {
+  background: linear-gradient(135deg, #c49a45, #dfba6c) !important;
+  color: #1a1014 !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn--gilt-gradient:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(196, 154, 69, 0.4) !important;
+}
+
+.educational-notice {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px dashed #c49a45;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #fdf6e2;
+  margin: 24px 0;
+  text-align: center;
+}
+
+.student-partners-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 30px;
+}
+
+.student-partners-box h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--bone);
+  margin-bottom: 8px;
+}
+
+.student-partners-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.student-partners-list a {
+  color: var(--gilt);
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.map-container {
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+}
